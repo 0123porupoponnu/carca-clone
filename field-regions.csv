@@ -1,0 +1,25 @@
+﻿ID,名前,領域数,草原領域（内部で同一領域となる外周ポート）,状態
+monastery,修道院,1,bottom_field + left_field + right_field + top_field,暫定：実盤面で要検証
+monastery_road,道付修道院,1,bottom_cw_end + bottom_cw_start + left_field + right_field + top_field,暫定：実盤面で要検証
+straight,ストレート,2,bottom_cw_end + left_field + top_cw_start / bottom_cw_start + right_field + top_cw_end,暫定：実盤面で要検証
+curve,カーブ,2,bottom_cw_start + left_cw_end + right_field + top_field / bottom_cw_end + left_cw_start,暫定：実盤面で要検証
+three_way,三叉路,3,left_cw_end + right_cw_start + top_field / bottom_cw_start + right_cw_end / bottom_cw_end + left_cw_start,暫定：実盤面で要検証
+crossroad,十字路,4,left_cw_end + top_cw_start / right_cw_start + top_cw_end / bottom_cw_start + right_cw_end / bottom_cw_end + left_cw_start,暫定：実盤面で要検証
+lip,リップ,1,bottom_field + left_field + right_field,暫定：実盤面で要検証
+underbar,アンダーバー,2,left_cw_end + right_cw_start / bottom_field + left_cw_start + right_cw_end,暫定：実盤面で要検証
+adjacent,隣接,1,bottom_field + right_field,暫定：実盤面で要検証
+parallel,平行,1,left_field + right_field,暫定：実盤面で要検証
+right_turn,右折,2,bottom_cw_start + left_cw_end + right_field / bottom_cw_end + left_cw_start,暫定：実盤面で要検証
+left_turn,左折,2,bottom_cw_end + left_field + right_cw_start / bottom_cw_start + right_cw_end,暫定：実盤面で要検証
+t_lip,T字リップ,4,right_cw_start / bottom_cw_start + right_cw_end / bottom_cw_end + left_cw_start / left_cw_end,暫定：実盤面で要検証
+tunnel_shield,土管（紋章あり）,2,top_field / bottom_field,暫定：実盤面で要検証
+tunnel_plain,土管（紋章なし）,2,top_field / bottom_field,暫定：実盤面で要検証
+two_edges_shield,2辺（紋章あり）,1,bottom_field + right_field,暫定：実盤面で要検証
+two_edges_plain,2辺（紋章なし）,1,bottom_field + right_field,暫定：実盤面で要検証
+two_edges_road_shield,道付2辺（紋章あり）,2,bottom_cw_end + right_cw_start / bottom_cw_start + right_cw_end,暫定：実盤面で要検証
+two_edges_road_plain,道付2辺（紋章なし）,2,bottom_cw_end + right_cw_start / bottom_cw_start + right_cw_end,暫定：実盤面で要検証
+three_edges_shield,3辺（紋章あり）,1,bottom_field,暫定：実盤面で要検証
+three_edges_plain,3辺（紋章なし）,1,bottom_field,暫定：実盤面で要検証
+three_edges_road_shield,道付3辺（紋章あり）,2,bottom_cw_start / bottom_cw_end,暫定：実盤面で要検証
+three_edges_road_plain,道付3辺（紋章なし）,2,bottom_cw_start / bottom_cw_end,暫定：実盤面で要検証
+four_edges,4辺,0,,暫定：実盤面で要検証

@@ -1,0 +1,1317 @@
+{
+  "name": "Carca Clone tile master",
+  "version": "4.2-field-region-draft",
+  "scope": "Base game; images supplied by user",
+  "tileTypes": 24,
+  "deckTiles": 71,
+  "startingTile": {
+    "tileId": "underbar",
+    "count": 1,
+    "initialRotationDegrees": 0
+  },
+  "allTiles": 72,
+  "warning": "Field-port connectivity is a draft pending independent verification on complex tile geometry, rotation and across-tile scoring. Do not use as validated scoring logic.",
+  "tiles": [
+    {
+      "id": "monastery",
+      "name": "修道院",
+      "deckCount": 4,
+      "startingCount": 0,
+      "totalCount": 4,
+      "image": "images/monastery.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "field",
+        "right": "field",
+        "bottom": "field",
+        "left": "field"
+      },
+      "cities": [],
+      "roads": [],
+      "monastery": true,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_field",
+            "left_field",
+            "right_field",
+            "top_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "monastery_road",
+      "name": "道付修道院",
+      "deckCount": 2,
+      "startingCount": 0,
+      "totalCount": 2,
+      "image": "images/monastery_road.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "field",
+        "right": "field",
+        "bottom": "road",
+        "left": "field"
+      },
+      "cities": [],
+      "roads": [
+        {
+          "edges": [
+            "bottom"
+          ]
+        }
+      ],
+      "monastery": true,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_end",
+            "bottom_cw_start",
+            "left_field",
+            "right_field",
+            "top_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "straight",
+      "name": "ストレート",
+      "deckCount": 8,
+      "startingCount": 0,
+      "totalCount": 8,
+      "image": "images/straight.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "road",
+        "right": "field",
+        "bottom": "road",
+        "left": "field"
+      },
+      "cities": [],
+      "roads": [
+        {
+          "edges": [
+            "top",
+            "bottom"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_end",
+            "left_field",
+            "top_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_start",
+            "right_field",
+            "top_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "curve",
+      "name": "カーブ",
+      "deckCount": 9,
+      "startingCount": 0,
+      "totalCount": 9,
+      "image": "images/curve.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "field",
+        "right": "field",
+        "bottom": "road",
+        "left": "road"
+      },
+      "cities": [],
+      "roads": [
+        {
+          "edges": [
+            "bottom",
+            "left"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_start",
+            "left_cw_end",
+            "right_field",
+            "top_field"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_end",
+            "left_cw_start"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "three_way",
+      "name": "三叉路",
+      "deckCount": 4,
+      "startingCount": 0,
+      "totalCount": 4,
+      "image": "images/three_way.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "field",
+        "right": "road",
+        "bottom": "road",
+        "left": "road"
+      },
+      "cities": [],
+      "roads": [
+        {
+          "edges": [
+            "right"
+          ]
+        },
+        {
+          "edges": [
+            "bottom"
+          ]
+        },
+        {
+          "edges": [
+            "left"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "left_cw_end",
+            "right_cw_start",
+            "top_field"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_start",
+            "right_cw_end"
+          ]
+        },
+        {
+          "id": "field_3",
+          "ports": [
+            "bottom_cw_end",
+            "left_cw_start"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "crossroad",
+      "name": "十字路",
+      "deckCount": 1,
+      "startingCount": 0,
+      "totalCount": 1,
+      "image": "images/crossroad.jpeg",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "road",
+        "right": "road",
+        "bottom": "road",
+        "left": "road"
+      },
+      "cities": [],
+      "roads": [
+        {
+          "edges": [
+            "top"
+          ]
+        },
+        {
+          "edges": [
+            "right"
+          ]
+        },
+        {
+          "edges": [
+            "bottom"
+          ]
+        },
+        {
+          "edges": [
+            "left"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "left_cw_end",
+            "top_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "right_cw_start",
+            "top_cw_end"
+          ]
+        },
+        {
+          "id": "field_3",
+          "ports": [
+            "bottom_cw_start",
+            "right_cw_end"
+          ]
+        },
+        {
+          "id": "field_4",
+          "ports": [
+            "bottom_cw_end",
+            "left_cw_start"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "lip",
+      "name": "リップ",
+      "deckCount": 5,
+      "startingCount": 0,
+      "totalCount": 5,
+      "image": "images/lip.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "field",
+        "bottom": "field",
+        "left": "field"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_field",
+            "left_field",
+            "right_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "underbar",
+      "name": "アンダーバー",
+      "deckCount": 3,
+      "startingCount": 1,
+      "totalCount": 4,
+      "image": "images/underbar.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "road",
+        "bottom": "field",
+        "left": "road"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "right",
+            "left"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "left_cw_end",
+            "right_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_field",
+            "left_cw_start",
+            "right_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "adjacent",
+      "name": "隣接",
+      "deckCount": 2,
+      "startingCount": 0,
+      "totalCount": 2,
+      "image": "images/adjacent.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "field",
+        "bottom": "field",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top"
+          ]
+        },
+        {
+          "edges": [
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_field",
+            "right_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "reviewed_visual_only",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "parallel",
+      "name": "平行",
+      "deckCount": 3,
+      "startingCount": 0,
+      "totalCount": 3,
+      "image": "images/parallel.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "field",
+        "bottom": "city",
+        "left": "field"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top"
+          ]
+        },
+        {
+          "edges": [
+            "bottom"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "left_field",
+            "right_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Opposite separated cities; side fields intentionally connected across tile center."
+    },
+    {
+      "id": "right_turn",
+      "name": "右折",
+      "deckCount": 3,
+      "startingCount": 0,
+      "totalCount": 3,
+      "image": "images/right_turn.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "field",
+        "bottom": "road",
+        "left": "road"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "bottom",
+            "left"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_start",
+            "left_cw_end",
+            "right_field"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_end",
+            "left_cw_start"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "left_turn",
+      "name": "左折",
+      "deckCount": 3,
+      "startingCount": 0,
+      "totalCount": 3,
+      "image": "images/left_turn.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "road",
+        "bottom": "road",
+        "left": "field"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "right",
+            "bottom"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_end",
+            "left_field",
+            "right_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_start",
+            "right_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "t_lip",
+      "name": "T字リップ",
+      "deckCount": 3,
+      "startingCount": 0,
+      "totalCount": 3,
+      "image": "images/t_lip.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "road",
+        "bottom": "road",
+        "left": "road"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "right"
+          ]
+        },
+        {
+          "edges": [
+            "bottom"
+          ]
+        },
+        {
+          "edges": [
+            "left"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": false,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "right_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_start",
+            "right_cw_end"
+          ]
+        },
+        {
+          "id": "field_3",
+          "ports": [
+            "bottom_cw_end",
+            "left_cw_start"
+          ]
+        },
+        {
+          "id": "field_4",
+          "ports": [
+            "left_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "tunnel_shield",
+      "name": "土管（紋章あり）",
+      "deckCount": 2,
+      "startingCount": 0,
+      "totalCount": 2,
+      "image": "images/tunnel.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "field",
+        "right": "city",
+        "bottom": "field",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "right",
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "top_field"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 1,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original_shielded",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "tunnel_plain",
+      "name": "土管（紋章なし）",
+      "deckCount": 1,
+      "startingCount": 0,
+      "totalCount": 1,
+      "image": "images/tunnel_plain.jpg",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "field",
+        "right": "city",
+        "bottom": "field",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "right",
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "top_field"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_individual_shieldless",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "two_edges_shield",
+      "name": "2辺（紋章あり）",
+      "deckCount": 2,
+      "startingCount": 0,
+      "totalCount": 2,
+      "image": "images/two_edges.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "field",
+        "bottom": "field",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_field",
+            "right_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 1,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "reviewed_visual_only",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original_shielded",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "two_edges_plain",
+      "name": "2辺（紋章なし）",
+      "deckCount": 3,
+      "startingCount": 0,
+      "totalCount": 3,
+      "image": "images/two_edges_plain.jpg",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "field",
+        "bottom": "field",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_field",
+            "right_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "reviewed_visual_only",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_individual_shieldless",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "two_edges_road_shield",
+      "name": "道付2辺（紋章あり）",
+      "deckCount": 2,
+      "startingCount": 0,
+      "totalCount": 2,
+      "image": "images/two_edges_road.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "road",
+        "bottom": "road",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "left"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "right",
+            "bottom"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_end",
+            "right_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_start",
+            "right_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 1,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "reviewed_visual_only",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original_shielded",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "two_edges_road_plain",
+      "name": "道付2辺（紋章なし）",
+      "deckCount": 3,
+      "startingCount": 0,
+      "totalCount": 3,
+      "image": "images/two_edges_road_plain.jpg",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "road",
+        "bottom": "road",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "left"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "right",
+            "bottom"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_end",
+            "right_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_start",
+            "right_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "reviewed_visual_only",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_individual_shieldless",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "three_edges_shield",
+      "name": "3辺（紋章あり）",
+      "deckCount": 1,
+      "startingCount": 0,
+      "totalCount": 1,
+      "image": "images/three_edges.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "city",
+        "bottom": "field",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "right",
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 1,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original_shielded",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "three_edges_plain",
+      "name": "3辺（紋章なし）",
+      "deckCount": 3,
+      "startingCount": 0,
+      "totalCount": 3,
+      "image": "images/three_edges_plain.jpg",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "city",
+        "bottom": "field",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "right",
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_field"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_individual_shieldless",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "three_edges_road_shield",
+      "name": "道付3辺（紋章あり）",
+      "deckCount": 2,
+      "startingCount": 0,
+      "totalCount": 2,
+      "image": "images/three_edges_road.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "city",
+        "bottom": "road",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "right",
+            "left"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "bottom"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 1,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original_shielded",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "three_edges_road_plain",
+      "name": "道付3辺（紋章なし）",
+      "deckCount": 1,
+      "startingCount": 0,
+      "totalCount": 1,
+      "image": "images/three_edges_road_plain.jpg",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "city",
+        "bottom": "road",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "right",
+            "left"
+          ]
+        }
+      ],
+      "roads": [
+        {
+          "edges": [
+            "bottom"
+          ]
+        }
+      ],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [
+        {
+          "id": "field_1",
+          "ports": [
+            "bottom_cw_start"
+          ]
+        },
+        {
+          "id": "field_2",
+          "ports": [
+            "bottom_cw_end"
+          ]
+        }
+      ],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "counts_user_confirmed; geometry_inherited_from_v2; field_regions_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_individual_shieldless",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    },
+    {
+      "id": "four_edges",
+      "name": "4辺",
+      "deckCount": 1,
+      "startingCount": 0,
+      "totalCount": 1,
+      "image": "images/four_edges.png",
+      "orientation": "as supplied; edge order top,right,bottom,left",
+      "edges": {
+        "top": "city",
+        "right": "city",
+        "bottom": "city",
+        "left": "city"
+      },
+      "cities": [
+        {
+          "edges": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
+        }
+      ],
+      "roads": [],
+      "monastery": false,
+      "shieldVisibleInSample": true,
+      "fieldRegions": [],
+      "shieldCountPerPhysicalTile": 0,
+      "verification": "edges_visual_checked; fields_and_shield_variants_unverified",
+      "edgeVerification": "visually_checked_against_uploaded_image",
+      "featureTopologyVerification": "provisional",
+      "shieldVariantImageAccurate": true,
+      "imageSource": "user_upload_original",
+      "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
+      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "readiness": "field_draft_registered; gameplay validation pending",
+      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+    }
+  ],
+  "sourceNotes": [
+    "User-supplied images: 19 representative tiles; counts from Meeple Eye.",
+    "Official reference: https://cundco.de/media/84/a4/ac/1773930056/CC_BigBox_2010_Rule.pdf?ts=1773930056 (base tiles A-X, 72 total).",
+    "Independent edge-count crosscheck: CarcassonneCentral forum post: 79 city edges, 94 road edges, 115 field edges (secondary community source).",
+    "24 official patterns A-X grouped into 19 user-visible categories. Variant shield distributions are not yet mapped."
+  ],
+  "imageVariants": 24
+}
