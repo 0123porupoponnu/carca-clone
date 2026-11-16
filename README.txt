@@ -1,13 +1,10 @@
-CARCA CLONE 配置テスト v1
+CARCA CLONE ミープル配置検証版 v1
 
-1. GitHubリポジトリ carca-clone のルートに placement-test.html を追加
-2. tile-master.json と images/ は既存のものがv4.2ならそのまま利用可能
-3. 公開後 https://0123porupoponnu.github.io/carca-clone/placement-test.html を開く
+GitHubリポジトリのルートに meeple-test.html を追加すると、既存 images/ と tile-master.json を利用して動きます。
+公開URL: https://0123porupoponnu.github.io/carca-clone/meeple-test.html
 
-ZIPには必要なJSONと画像24種類を同梱（既存と同じv4.2）。
-すでに配置済みなら placement-test.html だけアップロードでOK。
-index.html は上書きしないでください。
+ZIPには単独で使えるよう tile-master.json と images も同梱しています。
 
-判定範囲：4辺のcity/road/field一致、盤面隣接、90度回転、盤面への配置、取り消し。
-対象外：草原の内部連結、ミープル、山札消費、得点、CPU、盤面の無限拡張。
-実際の元画像とv4.2の辺定義は暫定のため、ここで違いを見つけて修正します。
+実装：2人交互、24種類、残枚数、タイル合法配置、都市・道・修道院・草原のミープル選択、つながった既存ミープルの配置制限、都市・道・修道院完成時の得点と回収、1手戻す。
+未実装：最終得点・草原得点・ランダムドロー・13x13外への拡張。草原接続は暫定。
+検証画面であり正式完成版ではありません。
