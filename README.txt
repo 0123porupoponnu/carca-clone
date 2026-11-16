@@ -1,6 +1,13 @@
-Carca Clone tile master v4.2 — 草原接続草案
+CARCA CLONE 配置テスト v1
 
-24種類の fieldRegions を追加。各道路の両側を別々の草原ポートとして扱い、隣り合うタイルで接続可能な単位を明示した。
-表示画像・都市・道路の接続・枚数はv4.1から変更していない。
-注意：草原領域は外周地形と代表画像に基づく初期モデル。特に平行・隣接・T字リップ・土管は実際の複数タイル連結と採点ケースで要検証。
-草原ポート仕様: top/right/bottom/left + _field または _cw_start/_cw_end。辺を時計回りにたどる際の前半/後半を表す。
+1. GitHubリポジトリ carca-clone のルートに placement-test.html を追加
+2. tile-master.json と images/ は既存のものがv4.2ならそのまま利用可能
+3. 公開後 https://0123porupoponnu.github.io/carca-clone/placement-test.html を開く
+
+ZIPには必要なJSONと画像24種類を同梱（既存と同じv4.2）。
+すでに配置済みなら placement-test.html だけアップロードでOK。
+index.html は上書きしないでください。
+
+判定範囲：4辺のcity/road/field一致、盤面隣接、90度回転、盤面への配置、取り消し。
+対象外：草原の内部連結、ミープル、山札消費、得点、CPU、盤面の無限拡張。
+実際の元画像とv4.2の辺定義は暫定のため、ここで違いを見つけて修正します。
