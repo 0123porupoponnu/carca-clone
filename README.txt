@@ -1,10 +1,6 @@
-CARCA CLONE ミープル配置検証版 v1
+CARCA CLONE 得点計算テスト v1
 
-GitHubリポジトリのルートに meeple-test.html を追加すると、既存 images/ と tile-master.json を利用して動きます。
-公開URL: https://0123porupoponnu.github.io/carca-clone/meeple-test.html
-
-ZIPには単独で使えるよう tile-master.json と images も同梱しています。
-
-実装：2人交互、24種類、残枚数、タイル合法配置、都市・道・修道院・草原のミープル選択、つながった既存ミープルの配置制限、都市・道・修道院完成時の得点と回収、1手戻す。
-未実装：最終得点・草原得点・ランダムドロー・13x13外への拡張。草原接続は暫定。
-検証画面であり正式完成版ではありません。
+既存の meeple-test.html は残します。scoring-test.html をGitHubルートに追加してください。
+同ディレクトリの tile-master.json と images/ を利用。
+完成時の都市・道路・修道院得点とミープル返却に加え、任意の盤面で終了時の未完成都市・道・修道院と草原得点のプレビューを表示。
+草原の内部接続と完成都市への接触関係は暫定定義。まだ正規の最終採点として使わないでください。
