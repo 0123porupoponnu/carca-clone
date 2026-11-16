@@ -1,6 +1,6 @@
 {
   "name": "Carca Clone tile master",
-  "version": "4.2-field-region-draft",
+  "version": "4.2-display-name-fix-1",
   "scope": "Base game; images supplied by user",
   "tileTypes": 24,
   "deckTiles": 71,
@@ -560,7 +560,7 @@
     },
     {
       "id": "right_turn",
-      "name": "右折",
+      "name": "左折",
       "deckCount": 3,
       "startingCount": 0,
       "totalCount": 3,
@@ -619,7 +619,7 @@
     },
     {
       "id": "left_turn",
-      "name": "左折",
+      "name": "右折",
       "deckCount": 3,
       "startingCount": 0,
       "totalCount": 3,
