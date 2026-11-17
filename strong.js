@@ -1,5 +1,5 @@
 'use strict';
-const STRONG_MODULE_VERSION='2.0.3-defense';
+const STRONG_MODULE_VERSION='2.0.2'; // Compatible with the v2.0.2 index.html boot check; tactical hotfix
 // Only use public remaining quantities. Never inspect the hidden draw pile.
 function remainingKnowledge(){
  const counts=new Map(tiles.map(t=>[t.id,t.totalCount??t.deckCount+(t.startingCount||0)]));
