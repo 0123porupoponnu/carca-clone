@@ -7,9 +7,27 @@
 .target-choice.farmer{background:#e8f5d3;border-color:#77a550;color:#36591d}.target-choice.disabled{background:#eceeea;border-color:#c6ccc4;color:#7a8179}.target-choice.selected{outline:3px solid #ffb226;outline-offset:2px;background:#fff5bd!important;color:#20412c!important}.target-choice.selected .target-mini{background:#164c8d}.target-choice.selected::after{content:"選択中";display:block;font-size:10px;margin-left:5px;color:#215a3b}.target-mini{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:999px;margin-right:8px;background:#2f6ed4;color:#fff;font-size:12px;font-weight:700;flex:none}.target-choice.farmer .target-mini{background:#6ea93f}.target-choice.disabled .target-mini{background:#9aa39b}.legend{font-size:11px;color:#5d6b5d;margin-top:8px;line-height:1.5}
 .target-choice:focus-visible{outline:3px solid #246b3f;outline-offset:2px}
 @media(max-width:420px){.target-choices{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style></head><body><header><h1>CARCA CLONE ｜ 得点計算テスト v1.3</h1><small>2人交互／都市・道・修道院／未完成地形／草原の仮計算</small></header><main class="layout"><section class="panel"><div style="display:flex;justify-content:space-between;gap:8px"><strong>盤面</strong><span class="tag" id="turncount">初期タイルのみ</span></div><div class="boardwrap" id="scroller"><div class="board" id="board"></div></div><p class="small">緑のマスをタップしてタイルを置こう。配置後はそのタイルにミープルを置くか、スキップして手番を確定してね。※13×13の検証盤面。</p></section><aside class="controls"><section class="panel full"><div class="phase" id="phase">読み込み中…</div><div class="players"><div class="player active" id="p0"><span class="dot" style="background:#2873d9"></span>青 / プレイヤー1<b><span id="s0">0</span> 点</b>手元 <span id="m0">7</span> 個</div><div class="player" id="p1"><span class="dot" style="background:#ef742b"></span>橙 / プレイヤー2<b><span id="s1">0</span> 点</b>手元 <span id="m1">7</span> 個</div></div><div id="status" class="status" aria-live="polite"></div></section>
+
+.zoom-picker{display:grid;gap:9px;justify-items:center;padding:12px;background:#f2f7ee;border:2px solid #d7e5d1;border-radius:12px;margin:10px auto}
+.zoom-tile{width:min(100%,300px);aspect-ratio:1;position:relative;touch-action:manipulation;background:#e7eee2;border:3px solid #d5ddcc;border-radius:6px;box-shadow:0 2px 8px #0002;overflow:hidden}
+.zoom-tile img{width:100%;height:100%;object-fit:fill;display:block;position:absolute;inset:0}
+.zoom-dot{position:absolute;transform:translate(-50%,-50%);border:3px solid white;border-radius:50%;width:39px;height:39px;font-size:16px;background:#286ed3;color:white;display:grid;place-items:center;font-weight:900;box-shadow:0 2px 8px #000a;cursor:pointer;z-index:3;padding:0}
+.zoom-dot.field{background:#43882d}.zoom-dot.disabled{background:#777;opacity:.7}.zoom-dot.selected{outline:5px solid #ffd536;outline-offset:2px;box-shadow:0 0 0 8px #ffdf4b66,0 2px 10px #0007;z-index:6;transform:translate(-50%,-50%) scale(1.13)}
+.zoom-dot:focus-visible{outline:4px solid #ffd536}
+.zoom-caption{width:100%;font-size:13px;font-weight:700;text-align:center;min-height:24px;color:#214b37}
+#confirmSpot{width:100%;font-size:16px;min-height:53px;background:#206d45}
+#confirmSpot:disabled{background:#a8b6a7;color:#5f6d60;opacity:1}
+#targetChoices .target-choice.selected{background:#ffe7a5;border-color:#efac18;outline:3px solid #f2bd30}
+@media(min-width:810px){.zoom-tile{width:260px}}
+</style></head><body><header><h1>CARCA CLONE ｜ 得点計算テスト v1.4</h1><small>2人交互／都市・道・修道院／未完成地形／草原の仮計算</small></header><main class="layout"><section class="panel"><div style="display:flex;justify-content:space-between;gap:8px"><strong>盤面</strong><span class="tag" id="turncount">初期タイルのみ</span></div><div class="boardwrap" id="scroller"><div class="board" id="board"></div></div><p class="small">緑のマスをタップしてタイルを置こう。配置後はそのタイルにミープルを置くか、スキップして手番を確定してね。※13×13の検証盤面。</p></section><aside class="controls"><section class="panel full"><div class="phase" id="phase">読み込み中…</div><div class="players"><div class="player active" id="p0"><span class="dot" style="background:#2873d9"></span>青 / プレイヤー1<b><span id="s0">0</span> 点</b>手元 <span id="m0">7</span> 個</div><div class="player" id="p1"><span class="dot" style="background:#ef742b"></span>橙 / プレイヤー2<b><span id="s1">0</span> 点</b>手元 <span id="m1">7</span> 個</div></div><div id="status" class="status" aria-live="polite"></div></section>
 <section class="panel full" id="newPanel"><label class="small" for="choice">置くタイル（テスト用：残枚数から選択）</label><select id="choice"></select><div class="previewline"><div class="preview"><img id="preview" alt="プレビュー"></div><div style="flex:1"><div id="tileinfo" class="small"></div><div class="btnrow"><button id="left" class="secondary">↶ 左90°</button><button id="right">↷ 右90°</button></div></div></div><p class="boxhint">実際の山札からランダムに引く機能は次の段階で追加するよ。</p></section>
-<section class="panel full" id="meeplePanel" hidden><strong style="font-size:13px">今置いたタイルにミープルを置く？</strong><p class="small">修道院タイルでも修道院・草原の両方を選べます。草原は、接続する草原に農夫がいない場合のみ配置できます。候補を1回押して選択、もう一度押すと確定します。</p><div id="targetStatus" class="status" role="status" aria-live="polite" style="margin-top:10px">置きたい場所を選択してね</div><div id="targetChoices" class="target-choices" aria-label="ミープル配置先"></div><div class="legend">番号つきマーカーと下のボタンが対応しています。グレーの候補は、すでにつながった先にミープルがいて置けない場所です。</div><button id="skip" style="width:100%" class="secondary">ミープルを置かずに手番を確定</button></section>
+<section class="panel full" id="meeplePanel" hidden><strong style="font-size:13px">今置いたタイルにミープルを置く？</strong><p class="small">修道院タイルでも修道院・草原の両方を選べます。草原は、接続する草原に農夫がいない場合のみ配置できます。大きいタイルで場所を選び、下の「ここに配置する」で確定します。</p><div id="targetStatus" class="status" role="status" aria-live="polite" style="margin-top:10px">置きたい場所を選択してね</div><div class="zoom-picker">
+<div class="zoom-caption">大きなタイル画像の数字をタップして場所を選んでね</div>
+<div id="zoomTile" class="zoom-tile" aria-label="ミープルの置き場所を選択"></div>
+<div id="zoomCaption" class="zoom-caption" aria-live="polite">まだ選択していません</div>
+</div>
+<div id="targetChoices" class="target-choices" aria-label="ミープル配置先"></div>
+<button id="confirmSpot" disabled type="button">置き場所を選んでね</button><div class="legend">大きいタイルの番号と下の番号は同じ候補です。黄色の枠が選択中。灰色は置けない場所です。</div><button id="skip" style="width:100%" class="secondary">ミープルを置かずに手番を確定</button></section>
 <section class="panel full"><strong>終了時の得点プレビュー</strong><p class="small">現在の盤面をゲーム終了と仮定して、未完成都市・道・修道院・草原の点数を計算。手番やミープルは変更しません。</p><button id="previewScore" class="secondary" style="width:100%">いま終了した場合の得点を見る</button><div id="scoreResults" class="scorelist" aria-live="polite"></div><p class="warntext">草原の接続と完成都市への隣接関係は暫定定義による仮計算です。正式な採点には追加検証が必要です。</p></section><section class="panel full"><div class="btnrow"><button id="undo" class="secondary">1手戻す</button><button id="reset" class="secondary">最初から</button></div><p class="small">初期1枚＋山札71枚。都市・道路・修道院は完成時に得点と返却。最終精算はプレビューで検証できます。</p><div id="log"></div></section></aside></main>
 <script>
 'use strict';
@@ -92,25 +110,51 @@ $('scoreResults').innerHTML=html;}
 function finish(){const events=scoring();if(events.length)log=[...events,...log].slice(0,10);round++;active=1-active;placed=null;phase='tile';selectedTargetKey=null;if(Object.values(counts).reduce((a,b)=>a+b,0)===0){phase='over';status('山札71枚を使い切ったよ。下の「終了時の得点プレビュー」で最終精算を確認してね。')}else status((events.length?events.join('／')+'。':'')+(active?'橙':'青')+'の手番。次のタイルを選んでね。');render()}
 function addMeeple(type,n){if(phase!=='meeple')return;const t=(placed?targetState(placed):[]).find(v=>v.type===type&&v.n===n);if(!t||!t.enabled)return;confirmTarget(t)}
 function tilePic(id,r,starter=false){const im=document.createElement('img');im.className='tile'+(starter?' start':'');im.src=db.get(id).image;im.alt=db.get(id).name;im.style.transform=`rotate(${r*90}deg)`;return im}
-function render(){const host=$('board');host.replaceChildren();for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){const pos=k(x,y),v=board.get(pos);const cell=document.createElement('button');cell.type='button';cell.className='cell';cell.setAttribute('aria-label',`盤面${x-C},${y-C}`);if(v){cell.appendChild(tilePic(v.id,v.rot,v.start));if(v.meeple){const mm=document.createElement('span');mm.className='meeple p'+v.meeple.player+(v.meeple.type==='field'?' field':'');const t=getTargets(pos).find(t=>t.type===v.meeple.type&&t.n===v.meeple.n);if(t){mm.style.left=t.px+'%';mm.style.top=t.py+'%'}cell.appendChild(mm)}if(phase==='meeple'&&placed===pos){const list=targetState(pos);for(const t of list){const bt=document.createElement('button');bt.type='button';bt.className='meeple-choice'+(t.type==='field'?' field':'')+(t.enabled?'':' disabled')+(selectedTargetKey===t.key?' highlight':'');bt.textContent=t.index;bt.title=`${t.index}. ${t.label}${t.enabled?'':'（置けない）'}`;const [ox,oy]=offsetFor(t.index-1);bt.style.left=`calc(${t.px}% + ${ox}px)`;bt.style.top=`calc(${t.py}% + ${oy}px)`;bt.onclick=ev=>{ev.stopPropagation(); if(!t.enabled)return; chooseTarget(t)};cell.appendChild(bt)}}}else if(phase==='tile'&&selected){let neighboring=DIR.some((_,i)=>board.has(nk(x,y,i)));if(neighboring){const ok=canPlace(x,y,selected,rot);cell.classList.add(ok?'legal':'bad');if(ok)cell.onclick=()=>{save();counts[selected.id]--;board.set(pos,{id:selected.id,rot,meeple:null});placed=pos;phase='meeple';selectedTargetKey=null;status('タイルを置いたよ。下の候補から修道院・草原などの場所を選んでね。');render();if(window.matchMedia('(max-width:810px)').matches){requestAnimationFrame(()=>{$('meeplePanel').scrollIntoView({behavior:'smooth',block:'start'})})}}}}host.appendChild(cell)}
+function render(){const host=$('board');host.replaceChildren();for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){const pos=k(x,y),v=board.get(pos);const cell=document.createElement('button');cell.type='button';cell.className='cell';cell.setAttribute('aria-label',`盤面${x-C},${y-C}`);if(v){cell.appendChild(tilePic(v.id,v.rot,v.start));if(v.meeple){const mm=document.createElement('span');mm.className='meeple p'+v.meeple.player+(v.meeple.type==='field'?' field':'');const t=getTargets(pos).find(t=>t.type===v.meeple.type&&t.n===v.meeple.n);if(t){mm.style.left=t.px+'%';mm.style.top=t.py+'%'}cell.appendChild(mm)}if(false&&phase==='meeple'&&placed===pos){const list=targetState(pos);for(const t of list){const bt=document.createElement('button');bt.type='button';bt.className='meeple-choice'+(t.type==='field'?' field':'')+(t.enabled?'':' disabled')+(selectedTargetKey===t.key?' highlight':'');bt.textContent=t.index;bt.title=`${t.index}. ${t.label}${t.enabled?'':'（置けない）'}`;const [ox,oy]=offsetFor(t.index-1);bt.style.left=`calc(${t.px}% + ${ox}px)`;bt.style.top=`calc(${t.py}% + ${oy}px)`;bt.onclick=ev=>{ev.stopPropagation(); if(!t.enabled)return; chooseTarget(t)};cell.appendChild(bt)}}}else if(phase==='tile'&&selected){let neighboring=DIR.some((_,i)=>board.has(nk(x,y,i)));if(neighboring){const ok=canPlace(x,y,selected,rot);cell.classList.add(ok?'legal':'bad');if(ok)cell.onclick=()=>{save();counts[selected.id]--;board.set(pos,{id:selected.id,rot,meeple:null});placed=pos;phase='meeple';selectedTargetKey=null;status('タイルを置いたよ。下の候補から修道院・草原などの場所を選んでね。');render();if(window.matchMedia('(max-width:810px)').matches){requestAnimationFrame(()=>{$('meeplePanel').scrollIntoView({behavior:'smooth',block:'start'})})}}}}host.appendChild(cell)}
 const targetHost=$('targetChoices');targetHost.replaceChildren();
 if(phase==='meeple'&&placed){
   const all=targetState(placed);
+  const zoom=$('zoomTile');zoom.replaceChildren();
+  const vv=board.get(placed),tt=db.get(vv.id);
+  const img=tilePic(vv.id,vv.rot);img.style.pointerEvents='none';zoom.appendChild(img);
+  const markers=[];
+  for(const t of all){
+    let x=t.px,y=t.py;
+    // Separate overlapping feature markers in the enlarged tile.
+    for(const m of markers){
+      if(Math.hypot(x-m.x,y-m.y)<14){
+        const angle=t.index*2.399963;
+        x=Math.max(9,Math.min(91,x+Math.cos(angle)*16));
+        y=Math.max(9,Math.min(91,y+Math.sin(angle)*16));
+      }
+    }
+    markers.push({x,y});
+    const dot=document.createElement('button');dot.type='button';
+    dot.className='zoom-dot'+(t.type==='field'?' field':'')+(t.enabled?'':' disabled')+(selectedTargetKey===t.key?' selected':'');
+    dot.style.left=x+'%';dot.style.top=y+'%';dot.textContent=t.index;
+    dot.setAttribute('aria-label',`${t.index}. ${t.label}${t.enabled?'':'（配置不可）'}`);
+    dot.disabled=!t.enabled;dot.onclick=()=>chooseTarget(t);zoom.appendChild(dot);
+  }
+  const chosen=all.find(t=>t.key===selectedTargetKey && t.enabled);
+  $('zoomCaption').textContent=chosen?`選択中：${chosen.index}番 ${chosen.label}（黄色の枠）`:'まだ選択していません';
+  const confirm=$('confirmSpot');confirm.disabled=!chosen;
+  confirm.textContent=chosen?`${chosen.index}番 ${chosen.label} に配置する`:'置き場所を選んでね';
+  confirm.onclick=()=>{if(chosen)confirmTarget(chosen)};
   for(const t of all){
     const b=document.createElement('button');b.type='button';
     b.className='target-choice'+(t.type==='field'?' farmer':'')+(t.enabled?'':' disabled')+(selectedTargetKey===t.key?' selected':'');
     b.setAttribute('aria-label',`${t.label}${t.enabled?'':'（置けません）'}`);
     b.innerHTML=`<span class="target-mini">${t.index}</span><span>${(t.type==='field'?'🌾 ':'● ')}${t.label}${t.enabled?'':'<br><small>置けない</small>'}</span>`;
-    b.onclick=()=>{ if(!t.enabled)return; if(selectedTargetKey===t.key){confirmTarget(t)} else {chooseTarget(t)} };
+    b.onclick=()=>{ if(t.enabled)chooseTarget(t) };
     targetHost.appendChild(b);
   }
   if(!all.length){targetHost.textContent=stock[active]===0?'手元のミープルがありません':'配置できる領域がありません'}
-  const chosen=all.find(t=>t.key===selectedTargetKey);
+  const chosenStatus=all.find(t=>t.key===selectedTargetKey);
   const lines=all.filter(t=>t.type==='field');
   const fld=lines.length?`🌾 草原：${lines.filter(t=>t.enabled).length}/${lines.length}か所に置けます。`:'このタイルには草原がありません。';
   const monastery=all.find(t=>t.type==='monastery');
-  $('targetStatus').textContent=chosen?`選択中：${chosen.index}番 ${chosen.label}。同じ番号をもう一度押すと配置します。 ${fld}`:`ミープルを置く場所を選んでね。${monastery?'⛪ 修道院も選べます。 ':''}${fld}`;
-}else{$('targetStatus').textContent='配置したタイルの候補がここに表示されます。'}
+  $('targetStatus').textContent=chosen?`選択中：${chosen.index}番 ${chosen.label}。下の確定ボタンで配置します。 ${fld}`:`ミープルを置く場所を選んでね。${monastery?'⛪ 修道院も選べます。 ':''}${fld}`;
+}else{$('targetStatus').textContent='配置したタイルの候補がここに表示されます。';$('zoomTile').replaceChildren();$('zoomCaption').textContent='';$('confirmSpot').disabled=true;}
 $('p0').classList.toggle('active',active===0);$('p1').classList.toggle('active',active===1);$('s0').textContent=score[0];$('s1').textContent=score[1];$('m0').textContent=stock[0];$('m1').textContent=stock[1];$('turncount').textContent='配置済み '+board.size+'枚 / 残り '+Object.values(counts).reduce((a,b)=>a+b,0)+'枚';$('phase').textContent=phase==='tile'?'タイル配置：'+(active?'橙':'青')+'の手番':phase==='meeple'?'ミープル配置：'+(active?'橙':'青')+'の手番':'山札終了';$('newPanel').hidden=phase!=='tile';$('meeplePanel').hidden=phase!=='meeple';$('undo').disabled=hist.length===0;const old=$('choice').value;$('choice').replaceChildren();for(const t of tiles){if(counts[t.id]<=0)continue;const opt=document.createElement('option');opt.value=t.id;opt.textContent=t.name+'（残'+counts[t.id]+'）';$('choice').append(opt)}if(selected&&counts[selected.id]>0)$('choice').value=selected.id;else{selected=db.get($('choice').value)||null;rot=0}if(selected){$('preview').src=selected.image;$('preview').style.transform=`rotate(${rot*90}deg)`;$('tileinfo').textContent=selected.name+' / '+(rot*90)+'° / 紋章'+(selected.shieldCountPerPhysicalTile||0)}$('log').textContent=log.slice(0,8).join(' ／ ');$('scoreResults').textContent='計算ボタンを押すと内訳が表示されるよ。'}
 function newGame(){board=new Map([[k(C,C),{id:'underbar',rot:0,start:true,meeple:null}]]);counts=Object.fromEntries(tiles.map(t=>[t.id,t.deckCount]));stock=[7,7];score=[0,0];active=0;round=0;phase='tile';placed=null;rot=0;hist=[];log=[];selectedTargetKey=null;selected=db.get('straight');status('青の手番。タイルを選択して配置してね。');render()}
 async function init(){try{const r=await fetch('tile-master.json',{cache:'no-store'});if(!r.ok)throw Error('tile-master.json がありません');const data=await r.json();tiles=data.tiles;db=new Map(tiles.map(t=>[t.id,t]));if(tiles.length!==24||tiles.reduce((n,t)=>n+t.deckCount,0)!==71)throw Error('タイル枚数が一致しません');$('choice').onchange=()=>{selected=db.get($('choice').value);rot=0;render()};$('left').onclick=()=>{rot=(rot+3)%4;render()};$('right').onclick=()=>{rot=(rot+1)%4;render()};$('skip').onclick=()=>{if(phase==='meeple'){save();finish()}};$('undo').onclick=restore;$('reset').onclick=()=>{if(confirm('最初からやり直す？'))newGame()};$('previewScore').onclick=showFinalScore;newGame()}catch(e){status('起動エラー：'+e.message+'。ZIPを展開した上でGitHub Pagesから開いてね。',true);console.error(e)}}init();
