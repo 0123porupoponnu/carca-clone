@@ -103,9 +103,3 @@ const value=3*touched.size,qty=[0,0];owners.forEach(n=>qty[n.v.meeple.player]++)
 for(let p=0;p<2;p++)if(qty[p]===most)extra[p]+=value;
 detail.push({feature:`草原（完成都市${touched.size}個）`,points:value,blue:qty[0]===most?value:0,orange:qty[1]===most?value:0})}
 return {extra,detail,totals:[score[0]+extra[0],score[1]+extra[1]]}}
-// Presentation totals only; never changes the scoring result or board.
-function finalScoreSummary(result){
- const rows=['未完成都市','未完成道路','未完成修道院','草原'].map(feature=>({feature,blue:0,orange:0}));
- for(const item of result.detail){const row=rows.find(r=>item.feature===r.feature||(r.feature==='草原'&&item.feature.startsWith('草原')));if(row){row.blue+=item.blue;row.orange+=item.orange}}
- return [{feature:'対局中の得点',blue:result.totals[0]-result.extra[0],orange:result.totals[1]-result.extra[1]},...rows,{feature:'合計',blue:result.totals[0],orange:result.totals[1]}];
-}

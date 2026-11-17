@@ -1,7 +1,8 @@
 'use strict';
+const CPU_MODULE_VERSION='2.0.0';
 // A fixed, one-ply opponent. It never reads or changes learning profiles.
 let cpuTimer=null;
-function isCpuTurn(){return mode==='cpu'&&active===1&&phase!=='over'}
+function isCpuTurn(){return (mode==='cpu'||mode==='learned')&&active===1&&phase!=='over'}
 function cancelCpu(){if(cpuTimer!==null)clearTimeout(cpuTimer);cpuTimer=null}
 function scheduleCpu(){cancelCpu();if(isCpuTurn())cpuTimer=setTimeout(()=>{cpuTimer=null;cpuTurn()},350)}
 function cpuFeatureValue(pos,target){
@@ -58,11 +59,11 @@ function chooseCpuPlacement(){
 function cpuTurn(){
  if(!isCpuTurn())return;
  if(phase==='tile'){
-  const move=chooseCpuPlacement();if(!move)return;
+  const move=mode==='learned'?learnedPlacement():(cpuLevel==='strong'?chooseStrongPlacement():chooseCpuPlacement());if(!move)return;
   rot=move.r;placeTile(move.x,move.y,true);
  }
  if(phase==='meeple'){
-  const target=chooseCpuTarget(placed);
+  const target=mode==='learned'?learnedTarget(placed):(cpuLevel==='strong'?chooseStrongTarget(placed):chooseCpuTarget(placed));
   if(target)confirmTarget(target,true);else finish(null);
  }
 }
