@@ -1,6 +1,6 @@
 {
   "name": "carca-clone",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": true,
   "scripts": {
     "test": "node --test tests/rules.test.cjs",

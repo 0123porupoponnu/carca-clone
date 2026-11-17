@@ -1,5 +1,5 @@
 'use strict';
-const STRONG_MODULE_VERSION='2.0.1';
+const STRONG_MODULE_VERSION='2.0.2';
 // Remaining quantities are public information. Never inspect pile or its order.
 function remainingKnowledge(){
  const counts=new Map(tiles.map(t=>[t.id,t.totalCount??t.deckCount+(t.startingCount||0)]));
@@ -91,11 +91,12 @@ function strongPositionValue(analysis,player=1){
  return values[player]-values[1-player];
 }
 function strongTargets(pos){return [null,...targetState(pos).filter(t=>t.enabled)]}
-function bestStrongTarget(pos,analysis){
+function bestStrongTarget(pos,analysis,preference=null){
  const v=board.get(pos),player=active;let best=null,value=-Infinity;
  for(const target of strongTargets(pos)){
+  const bonus=preference?preference(target):0;
   if(target){v.meeple={player,type:target.type,n:target.n};stock[player]--}
-  try{const current=strongPositionValue(analysis,player);if(current>value){value=current;best=target}}
+  try{const current=strongPositionValue(analysis,player)+bonus;if(current>value){value=current;best=target}}
   finally{if(target){v.meeple=null;stock[player]++}}
  }
  return {target:best,value};

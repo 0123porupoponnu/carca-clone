@@ -1,5 +1,5 @@
 'use strict';
-const LEARNING_MODULE_VERSION='2.0.1';
+const LEARNING_MODULE_VERSION='2.0.2';
 const LEARNING_VERSION=1,PLACEMENT_DIM=14,MEEPLE_DIM=14,MIN_LEARNING_SAMPLES=8;
 function validRanker(rank,dim){return rank&&rank.samples>=MIN_LEARNING_SAMPLES&&Array.isArray(rank.weights)&&rank.weights.length===dim&&rank.weights.every(Number.isFinite)}
 function usableLearningModel(model){return model?.version===LEARNING_VERSION&&(validRanker(model.placement,PLACEMENT_DIM)||validRanker(model.meeple,MEEPLE_DIM))}
@@ -85,15 +85,24 @@ function trainLearningProfile(profile){
  if(!usableLearningModel(model))throw Error('学習に使える対局が不足しています。もう1対局分を保存してください。');
  return model;
 }
+// Learning is a bounded preference among moves with similar strategic value.
+// Sparse imitation data must never overrule a clear scoring opportunity.
+function learningPreference(ranker,vector,dim){return validRanker(ranker,dim) ? .35*Math.tanh(rankValue(ranker.weights,vector)):0}
+function learnedMeeplePreference(model,pos,player){return target=>learningPreference(model?.meeple,meepleVector(pos,target,player),MEEPLE_DIM)}
 function learnedPlacement(){
- const model=currentLearningModel();if(!validRanker(model?.placement,PLACEMENT_DIM))return chooseCpuPlacement();
- const options=optionsFor(selected),stride=Math.max(1,Math.ceil(options.length/48));let best=null,value=-Infinity;
- for(let i=0;i<options.length;i+=stride){const o=options[i],v=rankValue(model.placement.weights,placementVector(selected,o,1));if(v>value){best=o;value=v}}
- return best||chooseCpuPlacement();
+ const model=currentLearningModel();if(!model)return chooseStrongPlacement();
+ const context=remainingContext(),options=optionsFor(selected),player=active;let best=null,value=-Infinity;
+ for(const move of options){
+  const preference=learningPreference(model.placement,placementVector(selected,move,player),PLACEMENT_DIM),pos=k(move.x,move.y);
+  board.set(pos,{id:selected.id,rot:move.r,meeple:null});
+  try{
+   const analysis=analyzeStrongPosition(context),choice=bestStrongTarget(pos,analysis,learnedMeeplePreference(model,pos,player));
+   if(choice.value+preference>value){value=choice.value+preference;best=move}
+  }finally{board.delete(pos)}
+ }
+ return best;
 }
 function learnedTarget(pos){
- const model=currentLearningModel();if(!validRanker(model?.meeple,MEEPLE_DIM))return chooseCpuTarget(pos);
- const candidates=[null,...targetState(pos).filter(t=>t.enabled)];let best=null,value=-Infinity;
- for(const t of candidates){const v=rankValue(model.meeple.weights,meepleVector(pos,t,1));if(v>value){best=t;value=v}}
- return best;
+ const model=currentLearningModel();
+ return bestStrongTarget(pos,analyzeStrongPosition(remainingContext()),learnedMeeplePreference(model,pos,active)).target;
 }
