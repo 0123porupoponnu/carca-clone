@@ -101,14 +101,20 @@ button,select,input{min-height:44px}
  .wrap>.sidebar{overflow-y:auto;min-height:0;align-content:start;padding-right:3px}
 }
 
-.board{grid-auto-rows:var(--tile-size)}
+/* Grid must always use the same size for both axes, even on mobile Safari. */
+.board{grid-auto-rows:var(--tile-size);grid-auto-columns:var(--tile-size);align-content:start;justify-content:start}
+.board>.cell{width:var(--tile-size)!important;height:var(--tile-size)!important;min-width:0!important;min-height:0!important;max-width:var(--tile-size);max-height:var(--tile-size);overflow:hidden;box-sizing:border-box;line-height:0;appearance:none;-webkit-appearance:none;flex:none}
+.board>.cell .tile{display:block;width:100%;height:100%;object-fit:fill;max-width:none;max-height:none}
+.board>.cell .piece{line-height:normal}
+.board>.cell.valid:after{line-height:1;position:absolute;inset:0;display:grid;place-items:center}
+
 .game-board .board-tools{grid-template-columns:repeat(6,minmax(0,1fr))}
 .game-board .board-tools button{white-space:normal;line-height:1.2}
 #fitAll.active,#center.active{background:#236c48;color:white}
 @media(max-width:850px){.game-board .board-tools{grid-template-columns:repeat(6,minmax(0,1fr))}.game-board .board-tools button{font-size:10px;padding:5px 1px;min-width:0}}
 @media(max-width:370px){.game-board .board-tools{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style></head><body>
-<header><div><h1>CARCA CLONE</h1><small>カルカソンヌ基本セット｜統合版 0.4.1</small></div><button id="openExtras" type="button" class="top-extras">☰ 記録・学習</button></header>
+<header><div><h1>CARCA CLONE</h1><small>カルカソンヌ基本セット｜統合版 0.4.2</small></div><button id="openExtras" type="button" class="top-extras">☰ 記録・学習</button></header>
 <main class="wrap">
 <section class="card game-board"><div class="row board-heading" style="justify-content:space-between"><h2>盤面</h2><span id="count" class="pill">準備中</span></div><div class="boardwrap" id="scroll"><div id="board" class="board"></div></div><p class="small">緑の＋を押して置く。タイルは90°ずつ回転できます。「全体表示」で配置済みタイルと周囲の空きマスを表示します。「近くを見る」で拡大できます。</p><div class="row board-tools"><button class="alt" id="zoomOut" aria-label="盤面を縮小">− 縮小</button><button class="alt" id="zoomIn" aria-label="盤面を拡大">＋ 拡大</button><button class="alt" id="fitAll">全体表示</button><button class="alt" id="center">近くを見る</button><button class="alt" id="undo">1手戻す</button><button class="warn" id="reset">新しい対戦</button></div></section>
 <aside class="sidebar">
@@ -257,7 +263,7 @@ function fitBoard(){
   // Fit the occupied board plus adjacent empty positions, NOT the 201x201 coordinate space.
   const cols=Number(host.dataset.cols)||1,rows=Number(host.dataset.rows)||1;
   const gap=2;
-  zoomSize=Math.max(9,Math.floor(Math.min((w-gap*(cols-1))/cols,(h-gap*(rows-1))/rows)));
+  zoomSize=Math.max(20,Math.floor(Math.min((w-gap*(cols-1))/cols,(h-gap*(rows-1))/rows)));
   applyZoom();el.scrollLeft=0;el.scrollTop=0;
   $('fitAll').classList.add('active');$('center').classList.remove('active');
  });
@@ -282,7 +288,9 @@ function placeTile(x,y){if(phase!=='tile'||!selected||!canPlace(x,y,selected,rot
 function drawBoard(){const host=$('board'),scroll=$('scroll');const oldX=scroll.scrollLeft,oldY=scroll.scrollTop;let xs=[...board.keys()].map(s=>Number(s.split(',')[0])),ys=[...board.keys()].map(s=>Number(s.split(',')[1]));const padding=boardView==='all'?1:3;
 const minx=Math.max(0,Math.min(...xs)-padding),maxx=Math.min(SIZE-1,Math.max(...xs)+padding),miny=Math.max(0,Math.min(...ys)-padding),maxy=Math.min(SIZE-1,Math.max(...ys)+padding);
 host.dataset.cols=String(maxx-minx+1);host.dataset.rows=String(maxy-miny+1);
-host.style.gridTemplateColumns=`repeat(${maxx-minx+1},var(--tile-size))`;host.replaceChildren();for(let y=miny;y<=maxy;y++)for(let x=minx;x<=maxx;x++){const pos=k(x,y),v=board.get(pos),c=document.createElement('button');c.className='cell';c.type='button';c.setAttribute('aria-label',`盤面 ${x-C},${y-C}`);if(v){c.appendChild(tilePic(v.id,v.rot,v.start));if(v.meeple){const t=getTargets(pos).find(t=>t.type===v.meeple.type&&t.n===v.meeple.n);const m=document.createElement('span');m.className='piece'+(v.meeple.player?' orange':'')+(v.meeple.type==='field'?' farm':'');if(t){m.style.left=t.px+'%';m.style.top=t.py+'%'}c.appendChild(m)}if(pos===placed)c.classList.add('current')}else if(phase==='tile'&&selected&&canPlace(x,y,selected,rot)){c.classList.add('valid');c.onclick=()=>placeTile(x,y)}host.appendChild(c)}}
+host.style.gridTemplateColumns=`repeat(${maxx-minx+1},var(--tile-size))`;
+host.style.gridTemplateRows=`repeat(${maxy-miny+1},var(--tile-size))`;
+host.replaceChildren();for(let y=miny;y<=maxy;y++)for(let x=minx;x<=maxx;x++){const pos=k(x,y),v=board.get(pos),c=document.createElement('button');c.className='cell';c.type='button';c.setAttribute('aria-label',`盤面 ${x-C},${y-C}`);if(v){c.appendChild(tilePic(v.id,v.rot,v.start));if(v.meeple){const t=getTargets(pos).find(t=>t.type===v.meeple.type&&t.n===v.meeple.n);const m=document.createElement('span');m.className='piece'+(v.meeple.player?' orange':'')+(v.meeple.type==='field'?' farm':'');if(t){m.style.left=t.px+'%';m.style.top=t.py+'%'}c.appendChild(m)}if(pos===placed)c.classList.add('current')}else if(phase==='tile'&&selected&&canPlace(x,y,selected,rot)){c.classList.add('valid');c.onclick=()=>placeTile(x,y)}host.appendChild(c)}}
 function renderMeeple(){const all=targetState(placed),tabs=$('featureTabs'),ch=$('choices'),z=$('meeplePreview');tabs.replaceChildren();ch.replaceChildren();z.replaceChildren();const t=board.get(placed);z.appendChild(tilePic(t.id,t.rot));const META={city:'🏰 都市',road:'🛣️ 道路',monastery:'⛪ 修道院',field:'🌾 草原'};let types=['city','road','monastery','field'].filter(type=>all.some(a=>a.type===type));if(!types.includes(selectedFeatureType))selectedFeatureType=types.find(type=>all.some(a=>a.type===type&&a.enabled))||types[0];for(const type of types){let a=all.filter(v=>v.type===type);let b=document.createElement('button');b.textContent=`${META[type]} (${a.filter(q=>q.enabled).length}/${a.length})`;b.className=type===selectedFeatureType?'active':'';b.onclick=()=>{selectedFeatureType=type;selectedTargetKey=null;renderMeeple()};tabs.appendChild(b)}for(const candidate of all.filter(v=>v.type===selectedFeatureType)){let b=document.createElement('button');b.textContent=candidate.label+(candidate.enabled?'':'（置けない）');b.disabled=!candidate.enabled;b.className=candidate.key===selectedTargetKey?'selected':'';b.onclick=()=>{selectedTargetKey=candidate.key;renderMeeple()};ch.appendChild(b)}let chosen=all.find(v=>v.key===selectedTargetKey&&v.enabled);$('selectedText').textContent=chosen?`選択中：${chosen.label}（黄色い丸）`:'場所を選んでね。';$('placeMeeple').disabled=!chosen;$('placeMeeple').onclick=()=>chosen&&confirmTarget(chosen);if(chosen){let dot=document.createElement('span');dot.id='marker';dot.style.left=Math.max(12,Math.min(88,chosen.px))+'%';dot.style.top=Math.max(12,Math.min(88,chosen.py))+'%';dot.textContent='●';z.appendChild(dot)}}
 function showEnd(){const res=finalScoring();$('result').innerHTML=`<p><b>青：${res.totals[0]}点 / オレンジ：${res.totals[1]}点</b></p><p>${res.totals[0]===res.totals[1]?'引き分け':res.totals[0]>res.totals[1]?'青の勝ち！':'オレンジの勝ち！'}</p><p class="small">※草原の判定は未検証の暫定計算です。</p>`;}
 function render(){$('p0').classList.toggle('turn',active===0);$('p1').classList.toggle('turn',active===1);$('s0').textContent=score[0]+' 点';$('s1').textContent=score[1]+' 点';$('m0').textContent='ミープル '+stock[0]+'個';$('m1').textContent='ミープル '+stock[1]+'個';$('count').textContent=`配置済み${board.size}枚 / 山札${pile.length+(selected?1:0)}枚`;$('drawPanel').classList.toggle('hide',phase!=='tile');$('meeplePanel').classList.toggle('hide',phase!=='meeple');$('finishPanel').style.display=phase==='over'?'block':'none';$('undo').disabled=!hist.length;if(phase==='tile'&&selected){$('turnTile').src=selected.image;$('turnTile').style.transform=`rotate(${rot*90}deg)`;$('tileName').textContent=selected.name;$('shield').textContent='紋章：'+(selected.shieldCountPerPhysicalTile||0);$('drawInfo').textContent=`第${round+1}手　${active?'オレンジ':'青'}の手番`;$('skipTile').disabled=optionsFor(selected).length>0;status(`${active?'オレンジ':'青'}の手番：緑の＋にタイルを配置してね`)}if(phase==='meeple'){status(`${active?'オレンジ':'青'}：ミープルを置くか、置かずに次へ`);renderMeeple()}if(phase==='over'){showEnd();status('山札が終了したよ！')}drawBoard();if(boardView==='all')fitBoard();$('log').textContent=log.slice(0,10).join(' ／ ')||'得点履歴はここに表示します。'}
