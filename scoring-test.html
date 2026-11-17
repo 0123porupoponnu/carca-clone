@@ -27,7 +27,7 @@
 .target-choices{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}
 .target-choice.selected{background:#fff0ae!important;border-color:#d48a16!important}
 .zoom-dot.solo{width:53px;height:53px;background:#ffcc32;color:#172c1f;border:4px solid white;box-shadow:0 0 0 5px #2c6c43,0 3px 10px #0009;font-size:23px}
-</style></head><body><header><h1>CARCA CLONE ｜ 得点計算テスト v1.5</h1><small>2人交互／都市・道・修道院／未完成地形／草原の仮計算</small></header><main class="layout"><section class="panel"><div style="display:flex;justify-content:space-between;gap:8px"><strong>盤面</strong><span class="tag" id="turncount">初期タイルのみ</span></div><div class="boardwrap" id="scroller"><div class="board" id="board"></div></div><p class="small">緑のマスをタップしてタイルを置こう。配置後はそのタイルにミープルを置くか、スキップして手番を確定してね。※13×13の検証盤面。</p></section><aside class="controls"><section class="panel full"><div class="phase" id="phase">読み込み中…</div><div class="players"><div class="player active" id="p0"><span class="dot" style="background:#2873d9"></span>青 / プレイヤー1<b><span id="s0">0</span> 点</b>手元 <span id="m0">7</span> 個</div><div class="player" id="p1"><span class="dot" style="background:#ef742b"></span>橙 / プレイヤー2<b><span id="s1">0</span> 点</b>手元 <span id="m1">7</span> 個</div></div><div id="status" class="status" aria-live="polite"></div></section>
+</style></head><body><header><h1>CARCA CLONE ｜ 得点計算テスト v1.6</h1><small>2人交互／都市・道・修道院／未完成地形／草原の仮計算</small></header><main class="layout"><section class="panel"><div style="display:flex;justify-content:space-between;gap:8px"><strong>盤面</strong><span class="tag" id="turncount">初期タイルのみ</span></div><div class="boardwrap" id="scroller"><div class="board" id="board"></div></div><p class="small">緑のマスをタップしてタイルを置こう。配置後はそのタイルにミープルを置くか、スキップして手番を確定してね。※13×13の検証盤面。</p></section><aside class="controls"><section class="panel full"><div class="phase" id="phase">読み込み中…</div><div class="players"><div class="player active" id="p0"><span class="dot" style="background:#2873d9"></span>青 / プレイヤー1<b><span id="s0">0</span> 点</b>手元 <span id="m0">7</span> 個</div><div class="player" id="p1"><span class="dot" style="background:#ef742b"></span>橙 / プレイヤー2<b><span id="s1">0</span> 点</b>手元 <span id="m1">7</span> 個</div></div><div id="status" class="status" aria-live="polite"></div></section>
 <section class="panel full" id="newPanel"><label class="small" for="choice">置くタイル（テスト用：残枚数から選択）</label><select id="choice"></select><div class="previewline"><div class="preview"><img id="preview" alt="プレビュー"></div><div style="flex:1"><div id="tileinfo" class="small"></div><div class="btnrow"><button id="left" class="secondary">↶ 左90°</button><button id="right">↷ 右90°</button></div></div></div><p class="boxhint">実際の山札からランダムに引く機能は次の段階で追加するよ。</p></section>
 <section class="panel full" id="meeplePanel" hidden><strong style="font-size:13px">今置いたタイルにミープルを置く？</strong><p class="small">修道院タイルでも修道院・草原の両方を選べます。草原は、接続する草原に農夫がいない場合のみ配置できます。地形の種類を選んでから場所を選ぼう。選んだ場所だけ黄色で表示されます。</p><div id="targetStatus" class="status" role="status" aria-live="polite" style="margin-top:10px">置きたい場所を選択してね</div><div class="zoom-picker">
 <div class="zoom-caption">① 地形を選ぶ → ② 場所を選ぶ → ③ 確定</div>
@@ -60,10 +60,14 @@ function featureComplete(comp,type){for(const node of comp){const [x,y]=node.pos
 function getTargets(pos){const v=board.get(pos),t=db.get(v.id),res=[];for(const type of ['city','road','monastery','field']){if(type==='monastery'){if(t.monastery)res.push({type,n:0,label:'修道院',px:50,py:50});continue}const cs=getComponents(t,type);for(let n=0;n<cs.length;n++){const q=cs[n],edgeNames=type==='field'?q.ports.map(p=>p.split('_')[0]):q.edges;let idx=edgeNames.length?DIR.indexOf(rdir(edgeNames[0],v.rot)):0;if(idx<0)idx=0;let xy=([ [50,19],[80,50],[50,80],[20,50] ])[idx];
 if(type==='field'){
   // Grass ports are distinct from the road/city centre of an edge.
+  // Explicit visual anchors for the three disconnected T-lip fields.
+  // field 1: between the city wall and the junction, 2: lower-right,
+  // 3: lower-left. Coordinates refer to unrotated artwork.
+  const explicit=t.id==='t_lip' ? [[52,22],[75,75],[25,75]] : null;
   const preferred=q.ports.find(p=>p.endsWith('_field'))||q.ports[0];
   const baseSide=preferred.split('_')[0];
   const bp={top:[34,30],right:[70,34],bottom:[66,70],left:[30,66]};
-  const vxy=bp[baseSide]||[32,32];let xx=vxy[0]-50,yy=vxy[1]-50;
+  const vxy=(explicit&&explicit[n])||bp[baseSide]||[32,32];let xx=vxy[0]-50,yy=vxy[1]-50;
   for(let i=0;i<v.rot;i++){const oldx=xx;xx=-yy;yy=oldx}
   xy=[50+xx,50+yy];
 }
