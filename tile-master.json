@@ -1,6 +1,6 @@
 {
   "name": "Carca Clone tile master",
-  "version": "4.2-display-name-fix-1",
+  "version": "4.3",
   "scope": "Base game; images supplied by user",
   "tileTypes": 24,
   "deckTiles": 71,
@@ -10,7 +10,7 @@
     "initialRotationDegrees": 0
   },
   "allTiles": 72,
-  "warning": "Field-port connectivity is a draft pending independent verification on complex tile geometry, rotation and across-tile scoring. Do not use as validated scoring logic.",
+  "warning": "T字リップ草原候補の数を4から3に訂正。その他の草原接続・得点計算は引き続き検証中。",
   "tiles": [
     {
       "id": "monastery",
@@ -560,7 +560,7 @@
     },
     {
       "id": "right_turn",
-      "name": "左折",
+      "name": "右折",
       "deckCount": 3,
       "startingCount": 0,
       "totalCount": 3,
@@ -619,7 +619,7 @@
     },
     {
       "id": "left_turn",
-      "name": "右折",
+      "name": "左折",
       "deckCount": 3,
       "startingCount": 0,
       "totalCount": 3,
@@ -720,7 +720,8 @@
         {
           "id": "field_1",
           "ports": [
-            "right_cw_start"
+            "right_cw_start",
+            "left_cw_end"
           ]
         },
         {
@@ -736,12 +737,6 @@
             "bottom_cw_end",
             "left_cw_start"
           ]
-        },
-        {
-          "id": "field_4",
-          "ports": [
-            "left_cw_end"
-          ]
         }
       ],
       "shieldCountPerPhysicalTile": 0,
@@ -751,9 +746,9 @@
       "shieldVariantImageAccurate": true,
       "imageSource": "user_upload_original",
       "geometryStatus": "provisional_edges_from_v2; internal_regions_not_certified",
-      "fieldRegionStatus": "draft_perimeter_model_needs_gameplay_validation",
+      "fieldRegionStatus": "corrected_user_observation_3_regions; board_tests_pending",
       "readiness": "field_draft_registered; gameplay validation pending",
-      "fieldTopologyNote": "Perimeter field-port groups; no guarantee of interior connectivity without board-level tests."
+      "fieldTopologyNote": "Upper field between city wall and road junction is continuous across left and right; merged previous field_1 and field_4. Verify multi-tile edge connectivity."
     },
     {
       "id": "tunnel_shield",
