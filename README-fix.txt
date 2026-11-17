@@ -1,1 +1,1 @@
-v1.0: 正式な変更点と検証範囲はREADME.mdとVERIFICATION.txtを参照してください。
+v1.0.1: 通常CPU対戦を追加。「相手」から「CPUと対戦」を選択。詳細はREADME.mdとVERIFICATION.txt。

@@ -1,6 +1,12 @@
-# CARCA CLONE v1.0 — 第1段階
+# CARCA CLONE v1.0.1 — 第1段階
 
-既存のタイル画像・24種類のマスタ・画面を引き継いだ、同じ端末を交互に操作する2人対戦版です。オンライン対戦ではありません。
+既存のタイル画像・24種類のマスタ・画面を引き継いだ、2人対戦と通常CPU対戦に対応しています。2人対戦は同じ端末を交互に操作します。オンライン対戦ではありません。
+
+## 通常CPUと対戦
+
+画面の「相手」を「CPUと対戦」に変更し、新しい対局を開始してください。青がプレイヤー（先手）、オレンジがCPUです。CPUは固定の評価方法で得点やミープルの残数を見て手を選びます。保存した学習データは使いません。強さの選択はありません。CPUの手番中は自動で進み、操作ボタンは無効になります。再読込後もCPU対戦を再開します。
+
+取り消しは、その画面を開いてからの履歴の範囲で、CPUの応答も含めてプレイヤーの操作まで戻ります。再読込前の取り消し履歴は保持しません。
 
 ## 遊び方
 
@@ -32,7 +38,7 @@ https://www.hans-im-glueck.de/wp-content/uploads/2024/11/Carcassonne-v3_Suppleme
 
 ## 学習データ
 
-「記録・学習」から名前別の対戦手保存、BGA URLメモ、JSON書き出し・読み込みができます。旧版の `carcaCloneUnifiedTrainingV1` をそのまま使用します。更新前にJSONを書き出すとバックアップになります。学習CPU・BGA棋譜の自動取得は第2段階です。
+「記録・学習」から名前別の対戦手保存、BGA URLメモ、JSON書き出し・読み込みができます。旧版の `carcaCloneUnifiedTrainingV1` をそのまま使用します。更新前にJSONを書き出すとバックアップになります。学習CPU・BGA棋譜の自動取得は第2段階です。通常CPUはv1.0.1で利用できます。
 
 旧試作版の途中対局は、暫定ルールの得点を引き継がないため自動再開しません。v1.0で新しく対局してください。旧学習記録は残ります。
 
@@ -47,6 +53,8 @@ node --test tests/rules.test.cjs
 ```
 
 ブラウザ内自動テスト： `http://localhost:8000/tests/browser-qa.html`
+
+CPU対戦のテスト： `http://localhost:8000/tests/browser-qa.html?cpu=1`
 スマホ390×844、iPad横1024×768、iPad縦768×1024のiframeで各71手を実行。テスト専用保存キーを使い、通常の学習・対局データは変更しません。
 
 Playwrightで実際のクリックを行うテストも同梱：
@@ -68,19 +76,19 @@ npm run test:browser
 2. ZIPを展開し、GitHubの `0123porupoponnu/carca-clone` を開く。
 3. `Add file` → `Upload files` で展開した中身をアップロードし、同じ名前のファイルを更新する。ZIP自体や外側のフォルダではなく、中のファイルを置く。
 4. Commit changes。Pagesが公開元にしているブランチへ反映する。
-5. Pagesの公開完了後にSafariで再読込し、見出し「第1段階 v1.0」を確認する。
+5. Pagesの公開完了後にSafariで再読込し、見出し「第1段階 v1.0.1」を確認する。
 
 Gitを使う方法：
 
 ```sh
 git clone https://github.com/0123porupoponnu/carca-clone.git
 cd carca-clone
-git switch -c release/v1.0
+git switch -c release/v1.0.1
 # ZIPの中身をこのフォルダへ上書きコピー
 node --test tests/rules.test.cjs
-git add index.html rules.js tile-master.json field-regions.csv README.md README.txt README-fix.txt VERIFICATION.txt package.json tests .gitignore
-git commit -m "Complete phase 1 two-player Carca Clone v1.0"
-git push -u origin release/v1.0
+git add index.html rules.js cpu.js tile-master.json field-regions.csv README.md README.txt README-fix.txt VERIFICATION.txt package.json tests .gitignore
+git commit -m "Add ordinary CPU opponent in Carca Clone v1.0.1"
+git push -u origin release/v1.0.1
 # GitHubで既定ブランチへのPull Requestを作り、マージ
 ```
 
@@ -89,6 +97,7 @@ git push -u origin release/v1.0
 ## ファイル
 
 - `index.html`：画面・対戦進行・保存。直接起動用のマスタも内蔵（テストで一致を検証）。
+- `cpu.js`：通常CPUの固定評価・手番実行。
 - `rules.js`：配置・連結・占有・採点の共有実装。
 - `tile-master.json`：枚数・辺・内部接続・草原と都市の隣接・表示座標。
 - `images/`：元画像を変更せず引き継ぎ。
