@@ -113,10 +113,13 @@ button,select,input{min-height:44px}
 #fitAll.active,#center.active{background:#236c48;color:white}
 @media(max-width:850px){.game-board .board-tools{grid-template-columns:repeat(6,minmax(0,1fr))}.game-board .board-tools button{font-size:10px;padding:5px 1px;min-width:0}}
 @media(max-width:370px){.game-board .board-tools{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Allow one-finger board panning; handle two-finger pinch directly on the board. */
+#scroll{touch-action:pan-x pan-y;overscroll-behavior:contain}
 </style></head><body>
-<header><div><h1>CARCA CLONE</h1><small>カルカソンヌ基本セット｜統合版 0.4.2</small></div><button id="openExtras" type="button" class="top-extras">☰ 記録・学習</button></header>
+<header><div><h1>CARCA CLONE</h1><small>カルカソンヌ基本セット｜統合版 0.4.3</small></div><button id="openExtras" type="button" class="top-extras">☰ 記録・学習</button></header>
 <main class="wrap">
-<section class="card game-board"><div class="row board-heading" style="justify-content:space-between"><h2>盤面</h2><span id="count" class="pill">準備中</span></div><div class="boardwrap" id="scroll"><div id="board" class="board"></div></div><p class="small">緑の＋を押して置く。タイルは90°ずつ回転できます。「全体表示」で配置済みタイルと周囲の空きマスを表示します。「近くを見る」で拡大できます。</p><div class="row board-tools"><button class="alt" id="zoomOut" aria-label="盤面を縮小">− 縮小</button><button class="alt" id="zoomIn" aria-label="盤面を拡大">＋ 拡大</button><button class="alt" id="fitAll">全体表示</button><button class="alt" id="center">近くを見る</button><button class="alt" id="undo">1手戻す</button><button class="warn" id="reset">新しい対戦</button></div></section>
+<section class="card game-board"><div class="row board-heading" style="justify-content:space-between"><h2>盤面</h2><span id="count" class="pill">準備中</span></div><div class="boardwrap" id="scroll"><div id="board" class="board"></div></div><p class="small">緑の＋を押して置く。タイルは90°ずつ回転できます。「全体表示」で配置済みタイルと周囲の空きマスを表示します。2本指でピンチ拡大・縮小できます。「近くを見る」で拡大できます。</p><div class="row board-tools"><button class="alt" id="zoomOut" aria-label="盤面を縮小">− 縮小</button><button class="alt" id="zoomIn" aria-label="盤面を拡大">＋ 拡大</button><button class="alt" id="fitAll">全体表示</button><button class="alt" id="center">近くを見る</button><button class="alt" id="undo">1手戻す</button><button class="warn" id="reset">新しい対戦</button></div></section>
 <aside class="sidebar">
 <section class="card scorecard"><div class="players"><div id="p0" class="player turn">🔵 青<strong id="s0" style="display:block">0 点</strong><span class="small" id="m0">ミープル7個</span></div><div id="p1" class="player">🟠 オレンジ<strong id="s1" style="display:block">0 点</strong><span class="small" id="m1">ミープル7個</span></div></div><p class="note" id="status">読み込み中…</p><div class="row"><label class="small" for="mode">相手</label><select id="mode"><option value="human">2人で遊ぶ</option><option value="cpu">練習CPU（暫定）</option></select></div></section>
 <section class="card" id="drawPanel"><h2>現在のタイル</h2><div id="tilePreview"><img id="turnTile" alt="現在のタイル"><div><b id="tileName"></b><p class="small" id="shield"></p><div class="row"><button id="rotateL" class="alt">↶ 左</button><button id="rotateR">右 ↷</button></div></div></div><p class="small" id="drawInfo"></p><button class="alt" id="skipTile">置けないタイルを交換</button></section>
@@ -268,6 +271,38 @@ function fitBoard(){
   $('fitAll').classList.add('active');$('center').classList.remove('active');
  });
 }
+// Pinch zoom inside the board: one finger continues to pan the scroll area.
+// We keep the current visible board range and zoom its grid without resetting it.
+let pinch=null;
+function touchDistance(a,b){return Math.hypot(b.clientX-a.clientX,b.clientY-a.clientY)}
+function touchMidpoint(a,b){return {x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2}}
+function installPinchZoom(){
+ const el=$('scroll');
+ el.addEventListener('touchstart',e=>{
+   if(e.touches.length!==2){if(e.touches.length<2)pinch=null;return}
+   const a=e.touches[0],b=e.touches[1],mid=touchMidpoint(a,b),rect=el.getBoundingClientRect();
+   pinch={distance:Math.max(1,touchDistance(a,b)),size:zoomSize,
+     originX:el.scrollLeft+mid.x-rect.left,originY:el.scrollTop+mid.y-rect.top};
+ },{passive:true});
+ el.addEventListener('touchmove',e=>{
+   if(!pinch||e.touches.length!==2)return;
+   if(e.cancelable)e.preventDefault();
+   const a=e.touches[0],b=e.touches[1],mid=touchMidpoint(a,b),rect=el.getBoundingClientRect();
+   const next=Math.max(18,Math.min(115,pinch.size*touchDistance(a,b)/pinch.distance));
+   if(Math.abs(next-zoomSize)<0.25)return;
+   const previous=zoomSize;
+   zoomSize=next;
+   boardView='manual';
+   applyZoom();
+   // Keep the point under the fingers roughly fixed while scaling the grid.
+   const ratio=zoomSize/pinch.size;
+   el.scrollLeft=Math.max(0,pinch.originX*ratio-(mid.x-rect.left));
+   el.scrollTop=Math.max(0,pinch.originY*ratio-(mid.y-rect.top));
+   $('fitAll').classList.remove('active');$('center').classList.remove('active');
+ },{passive:false});
+ el.addEventListener('touchend',e=>{if(e.touches.length<2)pinch=null},{passive:true});
+ el.addEventListener('touchcancel',()=>{pinch=null},{passive:true});
+}
 function nearBoard(){boardView='near';zoomSize=window.innerWidth<431?48:window.innerWidth<851?53:58;applyZoom();drawBoard();requestAnimationFrame(centerBoard);$('center').classList.add('active');$('fitAll').classList.remove('active')}
 
 applyZoom();
@@ -301,7 +336,7 @@ function persistTraining(){localStorage.setItem(KEY,JSON.stringify(training));re
 function renderTraining(){let name=$('profileName').value.trim(),p=training.profiles[name]||{moves:[]},arr=p.moves||[];let c={};for(let m of arr){let v=m.meeple?.type||'なし';c[v]=(c[v]||0)+1}$('learnStats').innerHTML=`<div class="stat">学習記録 <b>${arr.length}手</b></div><div class="stat">BGAのURLメモ <b>${training.replays.filter(x=>x.name===name).length}件</b></div>`;$('trainingList').textContent='配置傾向：'+Object.entries(c).map(([k,v])=>k+' '+v+'手').join(' / ');}
 function recordMoves(){let name=$('profileName').value.trim();if(!name){alert('学習させる人の名前を入れてね');return}if(!training.profiles[name])training.profiles[name]={moves:[]};const existing=training.profiles[name].moves;const who=Number($('learnPlayer').value);const own=moves.filter(x=>x.player===who&&!existing.some(q=>q.gameId===gameId&&q.turn===x.turn)).map(x=>({...x,gameId}));existing.push(...own);persistTraining();alert(`${own.length}手を「${name}」の学習記録に追加しました。`)}
 function exportTraining(){const b=new Blob([JSON.stringify(training,null,2)],{type:'application/json'}),url=URL.createObjectURL(b),a=document.createElement('a');a.href=url;a.download='carca-clone-learning.json';a.click();URL.revokeObjectURL(url)}
-async function init(){try{const r=await fetch('tile-master.json',{cache:'no-store'});if(!r.ok)throw Error('tile-master.jsonを読めません');const q=await r.json();tiles=q.tiles;db=new Map(tiles.map(t=>[t.id,t]));if(tiles.length!==24||tiles.reduce((s,t)=>s+t.deckCount,0)!==71)throw Error('枚数データが一致しません');loadTraining();$('rotateL').onclick=()=>{rot=(rot+3)%4;render()};$('rotateR').onclick=()=>{rot=(rot+1)%4;render()};$('skipMeeple').onclick=()=>{save();finish(null)};$('undo').onclick=restore;$('reset').onclick=()=>{if(confirm('新しい対戦を始める？'))newGame()};$('newAfter').onclick=newGame;$('center').onclick=nearBoard;$('fitAll').onclick=fitBoard;$('zoomIn').onclick=()=>zoomBoard(7);$('zoomOut').onclick=()=>zoomBoard(-7);$('mode').onchange=()=>{mode=$('mode').value;if(confirm('対戦モードを変更して新しく始める？'))newGame();else $('mode').value=mode};$('skipTile').onclick=()=>{if(selected&&optionsFor(selected).length===0){save();discard.push(selected.id);drawNext();render()}};$('scoreBtn').onclick=()=>{let f=finalScoring();$('scorePreview').innerHTML=`<p class="note">現在の得点＋終了時の仮計算：青 ${f.totals[0]} 点／橙 ${f.totals[1]} 点<br>草原得点は未検証です。</p>`};$('learningBtn').onclick=()=>{$('learning').classList.toggle('open');renderTraining()};$('profileName').oninput=renderTraining;$('saveProfile').onclick=recordMoves;$('saveReplay').onclick=()=>{const url=$('replayUrl').value.trim(),name=$('profileName').value.trim();if(!name||!/^https:\/\//.test(url)){alert('名前とhttps://から始まるURLを入力してね');return}training.replays.push({name,url,createdAt:new Date().toISOString(),imported:false});persistTraining();$('replayUrl').value='';alert('URLをメモとして保存したよ。棋譜の自動読込はまだ未実装です。')};$('exportData').onclick=exportTraining;$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{let x=JSON.parse(await f.text());if(!x.profiles||!x.replays)throw Error('学習データの形式が違います');training=x;persistTraining();alert('読み込めたよ')}catch(err){alert('読み込み失敗：'+err.message)}e.target.value=''};if(!restoreGame())newGame();else render();renderTraining();setTimeout(()=>boardView==='all'?fitBoard():centerBoard(),100);window.addEventListener('resize',()=>{if(boardView==='all')fitBoard()});if(mode==='cpu'&&active===1&&phase==='tile')setTimeout(cpuTurn,500)}catch(e){status('起動できません：'+e.message);console.error(e)}}
+async function init(){try{const r=await fetch('tile-master.json',{cache:'no-store'});if(!r.ok)throw Error('tile-master.jsonを読めません');const q=await r.json();tiles=q.tiles;db=new Map(tiles.map(t=>[t.id,t]));if(tiles.length!==24||tiles.reduce((s,t)=>s+t.deckCount,0)!==71)throw Error('枚数データが一致しません');loadTraining();$('rotateL').onclick=()=>{rot=(rot+3)%4;render()};$('rotateR').onclick=()=>{rot=(rot+1)%4;render()};$('skipMeeple').onclick=()=>{save();finish(null)};$('undo').onclick=restore;$('reset').onclick=()=>{if(confirm('新しい対戦を始める？'))newGame()};$('newAfter').onclick=newGame;installPinchZoom();$('center').onclick=nearBoard;$('fitAll').onclick=fitBoard;$('zoomIn').onclick=()=>zoomBoard(7);$('zoomOut').onclick=()=>zoomBoard(-7);$('mode').onchange=()=>{mode=$('mode').value;if(confirm('対戦モードを変更して新しく始める？'))newGame();else $('mode').value=mode};$('skipTile').onclick=()=>{if(selected&&optionsFor(selected).length===0){save();discard.push(selected.id);drawNext();render()}};$('scoreBtn').onclick=()=>{let f=finalScoring();$('scorePreview').innerHTML=`<p class="note">現在の得点＋終了時の仮計算：青 ${f.totals[0]} 点／橙 ${f.totals[1]} 点<br>草原得点は未検証です。</p>`};$('learningBtn').onclick=()=>{$('learning').classList.toggle('open');renderTraining()};$('profileName').oninput=renderTraining;$('saveProfile').onclick=recordMoves;$('saveReplay').onclick=()=>{const url=$('replayUrl').value.trim(),name=$('profileName').value.trim();if(!name||!/^https:\/\//.test(url)){alert('名前とhttps://から始まるURLを入力してね');return}training.replays.push({name,url,createdAt:new Date().toISOString(),imported:false});persistTraining();$('replayUrl').value='';alert('URLをメモとして保存したよ。棋譜の自動読込はまだ未実装です。')};$('exportData').onclick=exportTraining;$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{let x=JSON.parse(await f.text());if(!x.profiles||!x.replays)throw Error('学習データの形式が違います');training=x;persistTraining();alert('読み込めたよ')}catch(err){alert('読み込み失敗：'+err.message)}e.target.value=''};if(!restoreGame())newGame();else render();renderTraining();setTimeout(()=>boardView==='all'?fitBoard():centerBoard(),100);window.addEventListener('resize',()=>{if(boardView==='all')fitBoard()});if(mode==='cpu'&&active===1&&phase==='tile')setTimeout(cpuTurn,500)}catch(e){status('起動できません：'+e.message);console.error(e)}}
 $('openExtras').onclick=()=>document.body.classList.toggle('extras-open');
 $('closeExtras').onclick=()=>document.body.classList.remove('extras-open');
 init();
