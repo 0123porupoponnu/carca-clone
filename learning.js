@@ -1,5 +1,5 @@
 'use strict';
-const LEARNING_MODULE_VERSION='2.0.0';
+const LEARNING_MODULE_VERSION='2.0.1';
 const LEARNING_VERSION=1,PLACEMENT_DIM=14,MEEPLE_DIM=14,MIN_LEARNING_SAMPLES=8;
 function validRanker(rank,dim){return rank&&rank.samples>=MIN_LEARNING_SAMPLES&&Array.isArray(rank.weights)&&rank.weights.length===dim&&rank.weights.every(Number.isFinite)}
 function usableLearningModel(model){return model?.version===LEARNING_VERSION&&(validRanker(model.placement,PLACEMENT_DIM)||validRanker(model.meeple,MEEPLE_DIM))}
