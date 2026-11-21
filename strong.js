@@ -1,6 +1,6 @@
 'use strict';
-const STRONG_MODULE_VERSION='2.0.2'; // Compatible with the v2.0.2 index.html boot check; tactical hotfix
-// Only use public remaining quantities. Never inspect the hidden draw pile.
+const STRONG_MODULE_VERSION='2.0.4';
+// Remaining quantities are public information. Never inspect pile or its order.
 function remainingKnowledge(){
  const counts=new Map(tiles.map(t=>[t.id,t.totalCount??t.deckCount+(t.startingCount||0)]));
  for(const v of board.values())counts.set(v.id,Math.max(0,(counts.get(v.id)||0)-1));
@@ -28,6 +28,7 @@ function supportForCell(x,y,context){
 function frontierCells(comp,type){
  const cells=new Set();for(const node of comp){const [x,y]=node.pos.split(',').map(Number);for(const side of ports(node.tile,type,node.n)){const d=DIR.indexOf(rdir(side,node.v.rot)),pos=nk(x,y,d);if(!board.has(pos))cells.add(pos)}}return [...cells];
 }
+// Necessary feasibility test: distinct holes require distinct remaining physical tiles.
 function canFillAll(supports){
  const slots=new Map();let count=0;
  for(const support of supports)for(const {id,count:n} of support)if(!slots.has(id)){slots.set(id,Array.from({length:n},()=>count++))}
@@ -40,6 +41,7 @@ function completionEstimate(comp,type,context){
  const frontier=frontierCells(comp,type);if(!frontier.length)return {complete:true,probability:1,probabilities:[1,1],blocked:false};
  const supports=frontier.map(p=>supportForCell(...p.split(',').map(Number),context));
  if(supports.some(s=>!s.length)||!canFillAll(supports))return {complete:false,probability:0,probabilities:[0,0],blocked:true};
+ // Approximation: enough matching draws on this player's future turns, per opening.
  const probabilities=[1,1];for(const support of supports){const matches=support.reduce((s,v)=>s+v.count,0);for(let p=0;p<2;p++)probabilities[p]*=drawAtLeastOne(context.total,matches,p===active?Math.floor(context.total/2):Math.ceil(context.total/2))}
  return {complete:false,probability:probabilities[active],probabilities,blocked:false};
 }
@@ -88,79 +90,6 @@ function strongPositionValue(analysis,player=1){
  for(let p=0;p<2;p++)values[p]+=stockValue[Math.max(0,Math.min(7,available[p]))]*early;
  return values[player]-values[1-player];
 }
-/* Tactical defense v2.0.3.
-   Defense: ensure an actual remaining tile can still finish a player's openings.
-   Weak defense: retain finishing tiles, while making *hostile* tile placements rarer.
-   Attack: reduce opponent completion chances without sacrificing our own viability.
-   We evaluate ALL legal orientations against ALL immediate neighboring edges, but
-   only aggregate PUBLIC tile counts (not the private deck order). */
-function tacticalHole(comp,type,pos,context){
- const [x,y]=pos.split(',').map(Number),requirements=[],featureSides=new Set();
- for(let d=0;d<4;d++){
-  const adjacent=board.get(nk(x,y,d));
-  requirements[d]=adjacent?edge(db.get(adjacent.id),adjacent.rot,OP[d]):null;
- }
- // Which sides of the hole actually connect to this particular feature?
- for(const node of comp){
-  const [nx,ny]=node.pos.split(',').map(Number);
-  for(const side of ports(node.tile,type,node.n)){
-   const d=DIR.indexOf(rdir(side,node.v.rot));
-   if(nx+DX[d]===x&&ny+DY[d]===y)featureSides.add(OP[d]);
-  }
- }
- if(!featureSides.size)return null;
- let closing=0,hostile=0,continuing=0,total=0;
- for(const {id,count} of supportForCell(x,y,context)){
-  const tile=db.get(id);if(!tile)continue;
-  // A physical tile is one draw, regardless of how many rotations are legal.
-  let bestOut=Infinity,worstOut=-1;
-  for(let r=0;r<4;r++){
-   if(!requirements.every((req,d)=>!req||edge(tile,r,d)===req))continue;
-   const connected=new Set();
-   for(let i=0;i<getComponents(tile,type).length;i++){
-    const rotated=ports(tile,type,i).map(side=>DIR.indexOf(rdir(side,r)));
-    if(rotated.some(d=>featureSides.has(d)))for(const d of rotated)connected.add(d);
-   }
-   if(!connected.size)continue;
-   let exits=0;for(const d of connected)if(!board.has(nk(x,y,d)))exits++;
-   bestOut=Math.min(bestOut,exits);worstOut=Math.max(worstOut,exits);
-  }
-  if(worstOut<0)continue;
-  total+=count;
-  // A tile can be rotated beneficially or maliciously. Both possibilities matter.
-  if(bestOut===0)closing+=count;
-  if(worstOut>=2)hostile+=count;
-  if(bestOut===1)continuing+=count;
- }
- if(!total)return {total:0,safe:0,hostile:0,continuing:0};
- return {total,safe:closing/total,hostile:hostile/total,continuing:continuing/total};
-}
-function strongTacticalValue(analysis,context,player=1){
- let value=0,examined=0;
- for(const f of analysis.features){
-  if((f.type!=='city'&&f.type!=='road')||f.complete)continue;
-  const ownership=[0,0];for(const n of f.comp){const m=n.v.meeple;if(m?.type===f.type&&m.n===n.n)ownership[m.player]++}
-  if(ownership[0]===ownership[1])continue; // Shared or unowned features have no clear defensive side.
-  const owner=ownership[1]>ownership[0]?1:0;
-  const holes=frontierCells(f.comp,f.type);
-  if(!holes.length)continue;
-  let risk=0,safety=0,valid=0;
-  for(const pos of holes.slice(0,6)){
-   const t=tacticalHole(f.comp,f.type,pos,context);
-   if(!t)continue;
-   valid++;
-   // Hostile options are especially dangerous, whereas genuine finishers protect us.
-   risk+=t.total?t.hostile:1;
-   safety+=t.safe;
-  }
-  if(!valid)continue;
-  const blocked=f.blocked?1:0;
-  const tactics=(-2.0*risk/valid+1.5*safety/valid-2.5*blocked)*Math.min(1.4,0.75+holes.length*.12);
-  value+=(owner===player?1:-1)*tactics;
-  if(++examined>=14)break; // Keep the CPU responsive on mobile.
- }
- return value;
-}
 function strongTargets(pos){return [null,...targetState(pos).filter(t=>t.enabled)]}
 function bestStrongTarget(pos,analysis,preference=null){
  const v=board.get(pos),player=active;let best=null,value=-Infinity;
@@ -176,37 +105,9 @@ function chooseStrongPlacement(){
  const context=remainingContext(),options=optionsFor(selected);let best=null,value=-Infinity;
  for(const move of options){
   const pos=k(move.x,move.y);board.set(pos,{id:selected.id,rot:move.r,meeple:null});
-  try{
-   const analysis=analyzeStrongPosition(context),choice=bestStrongTarget(pos,analysis);
-   const tactics=strongTacticalValue(analysis,context,active);
-   const combined=choice.value+tactics;
-   if(combined>value){value=combined;best=move}
-  }finally{board.delete(pos)}
+  try{const analysis=analyzeStrongPosition(context),choice=bestStrongTarget(pos,analysis);if(choice.value>value){value=choice.value;best=move}}
+  finally{board.delete(pos)}
  }
  return best;
 }
 function chooseStrongTarget(pos){return bestStrongTarget(pos,analyzeStrongPosition(remainingContext())).target}
-// The learned CPU also needs these tactics. Its 14-dimensional imitation model,
-// stored training JSON and existing move preferences remain unchanged.
-function defensiveLearnedPlacement(){
- const model=currentLearningModel();if(!model)return chooseStrongPlacement();
- const context=remainingContext(),options=optionsFor(selected),player=active;
- let best=null,value=-Infinity;
- for(const move of options){
-  const preference=learningPreference(model.placement,placementVector(selected,move,player),PLACEMENT_DIM),pos=k(move.x,move.y);
-  board.set(pos,{id:selected.id,rot:move.r,meeple:null});
-  try{
-   const analysis=analyzeStrongPosition(context),choice=bestStrongTarget(pos,analysis,learnedMeeplePreference(model,pos,player));
-   const combined=choice.value+preference+strongTacticalValue(analysis,context,player);
-   if(combined>value){value=combined;best=move}
-  }finally{board.delete(pos)}
- }
- return best;
-}
-// learning.js is loaded after strong.js in v2.0.2, so install the adapter after
-// parsing. The app's own cpuTurn() keeps calling learnedPlacement() as before.
-if(typeof document!=='undefined')document.addEventListener('DOMContentLoaded',()=>{
- if(typeof learnedPlacement==='function'&&typeof currentLearningModel==='function'){
-  learnedPlacement=defensiveLearnedPlacement;
- }
-});
