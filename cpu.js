@@ -1,5 +1,5 @@
 'use strict';
-const CPU_MODULE_VERSION='2.0.6';
+const CPU_MODULE_VERSION='2.0.7';
 // A fixed, one-ply opponent. It never reads or changes learning profiles.
 let cpuTimer=null;
 function isCpuTurn(){return (mode==='cpu'||mode==='learned')&&active===1&&phase!=='over'}
