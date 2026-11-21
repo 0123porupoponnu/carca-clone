@@ -1,5 +1,5 @@
 'use strict';
-const STRONG_MODULE_VERSION='2.0.5';
+const STRONG_MODULE_VERSION='2.0.6';
 // Remaining quantities are public information. Never inspect pile or its order.
 function remainingKnowledge(){
  const counts=new Map(tiles.map(t=>[t.id,t.totalCount??t.deckCount+(t.startingCount||0)]));
